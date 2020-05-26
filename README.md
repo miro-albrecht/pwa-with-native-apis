@@ -1,5 +1,23 @@
 # Pwa
 
+Setup
+
+    npm i -g http-server
+    npm i
+    
+Run as pwa
+
+    ng build --prod
+    http-server dist/pwa -p 8080 -c-1
+
+*The -c-1 parameter disabled cache for the http-server.*
+
+Update capacitor artifacts
+
+    npx cap copy
+
+---
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
 
 ## Development server
