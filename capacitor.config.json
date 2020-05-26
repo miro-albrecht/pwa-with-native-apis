@@ -1,0 +1,13 @@
+{
+  "appId": "ch.efd.bit.ewm.pwa",
+  "appName": "pwa",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist/pwa",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
