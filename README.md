@@ -1,45 +1,182 @@
-# Pwa
+# PWA with access to native APIs on mobile
 
-Setup
+This is a demo project to explore the possibilities of adding native API access to an existing PWA.
+In this case, we try Capacitor.
 
-    npm i -g http-server
-    npm i
-    
-Run as pwa
+## Prerequisites
 
-    ng build --prod
-    http-server dist/pwa -p 8080 -c-1
+A up to date version of node with npm is required. Also install the Angular cli.
 
-*The -c-1 parameter disabled cache for the http-server.*
+You need a SPA with a manifest and a service worker, which makes it a PWA. You can skip the rest of the prerequisites if you already have an application ready.
 
-Update capacitor artifacts
+```bash
+ng new awesome-ewm-app
+```
 
-    npx cap copy
+Let's use Angular to make our app a PWA. After this step, you can inspect the generated manifest in the `src` folder.
 
----
+```bash
+cd awersome-ewm-app
+ng add @angular/pwa
+```
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
+`ng serve` doesn't work with service workers, so a different HTTP server is required. In the Angular docs `http-server` is suggested.
 
-## Development server
+```bash
+npm i -g http-server
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To run the application, build it with Angular and use `http-server` to run it.
 
-## Code scaffolding
+```bash
+ng build --prod
+http-server dist/awesome-ewm-app -p 8080 -c-1
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Open `localhost:8080` to view your application live.
 
-## Build
+> Note: If you are not using HTTPS, the service worker will only be registered when accessing the app on localhost.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+You can test your PWA by setting the network to offline in the developer tools of your browser. The application should still be displayed, even after a refresh. However changes are loaded in the background and not applied immediately.
 
-## Running unit tests
+Source: [Getting started with service workers (Angular Docs)](https://angular.io/guide/service-worker-getting-started)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Use Capacitor to access native APIs
 
-## Running end-to-end tests
+### Installation
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Install Capacitor with `npm`.
 
-## Further help
+```bash
+npm i --save @capacitor/core @capacitor/cli
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Initialize Capacitor. Don't forget to pass the `--web-dir` parameter, the default value doesn't work with Angular.
+
+```bash
+npx cap init --web-dir dist/awesome-ewm-app
+```
+
+Add the platforms you want to use. These work in addition to the existing PWA.
+
+```bash
+npx cap add android
+npx cap add ios
+npx cap add electron
+```
+
+> Note: You need working development environments to test the platforms. However you can add them and still just test the PWA in your browser.
+
+### Optionally add PWA Elements
+
+Some Capacitor APIs work only on mobile (e.g. Camera), however a fallback for PWAs can be used. PWA Elements provide a web-based UI for *some* of the APIs, but not all of them.
+
+```bash
+npm i @ionic/pwa-elements
+```
+
+Register the custom elements in the `main.ts` of your Angular application:
+
+```typescript
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+
+// Add import
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+if (environment.production) {
+  enableProdMode();
+}
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.log(err));
+
+// Call the element loader after the platform has been bootstrapped
+defineCustomElements(window);
+```
+
+### Example: Use Camera API
+
+Choose any component, for demonstration purposes we just use the AppComponent.
+
+```typescript
+import { Component } from '@angular/core';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
+@Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+
+    // Add property to show the photo
+    photo: SafeResourceUrl;
+
+    constructor(private readonly sanitizer: DomSanitizer) { }
+
+    // Add a method for taking pictures
+    async takePicture() {
+
+        // Use the Capacitor API
+        const image = await Plugins.Camera.getPhoto({
+            quality: 100,
+            allowEditing: false,
+            resultType: CameraResultType.DataUrl,
+            source: CameraSource.Camera,
+        });
+
+        // Use sanizizer to tell Angular to trust the dynamic image data
+        this.photo = this.sanitizer.bypassSecurityTrustResourceUrl(
+            image && image.dataUrl
+        );
+    }
+}
+
+```
+
+Add an image container to show the picture and a button to take one:
+
+```html
+<section>
+    <img [src]="photo" alt="Picture taken with Capacitor API"><br>
+    <button (click)="takePicture()">Take picture</button>
+</section>
+```
+
+Build the application with Angular:
+
+```bash
+ng build --prod
+```
+
+#### PWA
+
+Run it with the `http-server` as described above.
+
+#### iOS / Android
+
+After changes to the application, you need to run `copy`:
+
+```bash
+npx cap copy
+```
+
+After changes to the native part of the code (such as adding a new plugin), use `sync`:
+
+```bash
+npx cap sync
+```
+
+Open the native projects in Xcode or Android Studio:
+
+```bash
+npx cap open ios
+npx cap open android
+```
+
+Source: [Installing Capacitor](https://capacitor.ionicframework.com/docs/getting-started) and [Building an Ionic Framework Camera App](https://capacitor.ionicframework.com/docs/guides/ionic-framework-app)
