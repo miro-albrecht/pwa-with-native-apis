@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+    font-family: "Segoe UI", "Helvetica", sans-serif;
+    font-size: 1em;
+    line-height: 1.6em;
+    background-color: rgb(254, 254, 254);
+    color: rgba(0, 0, 0, 0.89)
+}
+
+main {
+    margin: 2em auto;
+    max-width: 70ch;
+    padding: 1em 2em;
+    min-height: 75vh;
+}
+
+section {
+    border: darkblue solid 1px;
+    border-radius: 0.4em;
+    padding: 1em;
+    margin: 1em -0.5em;
+    box-shadow: rgba(151, 151, 151, 0.2) 5px 5px 7px;
+    background-color: white;
+}
+
+section h2 {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 2em;
+}
+
+button {
+    font-family: "Consolas", monospace;
+    font-weight: bold;
+    padding: 0.5em 0.7em;
+    cursor: pointer;
+    border-radius: 0.4em;
+    border-style: solid;
+    border-width: 1px;
+    margin: 0.2em auto;
+}
+
+button:hover {
+    border-color: darkblue;
+    background-color: whitesmoke;
+}

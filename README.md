@@ -1,7 +1,6 @@
 # PWA with access to native APIs on mobile
 
-This is a demo project to explore the possibilities of adding native API access to an existing PWA.
-In this case, we try Capacitor.
+This is a demo project to explore the possibilities of adding native API access to an existing PWA. For this purpose, we use [Capacitor](https://capacitor.ionicframework.com/) from [Ionic](https://ionicframework.com/).
 
 ## Prerequisites
 
@@ -194,3 +193,4 @@ Source: [Installing Capacitor](https://capacitor.ionicframework.com/docs/getting
   - [Community Plugins](https://capacitor.ionicframework.com/docs/community/plugins/)
   - [GitHub](https://github.com/ionic-team/capacitor)
 - [Ionic](https://ionicframework.com/)
+  - [Progressive Web Apps in Angular](https://ionicframework.com/docs/angular/pwa)

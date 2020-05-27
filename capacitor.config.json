@@ -6,7 +6,7 @@
   "webDir": "dist/pwa",
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0
+      "launchShowDuration": 5000
     }
   },
   "cordova": {}
