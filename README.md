@@ -139,7 +139,7 @@ export class AppComponent {
 
 ```
 
-Add an image container to show the picture and a button to take one:
+Add an image container to the template to show the picture and a button to take one:
 
 ```html
 <section>
@@ -180,3 +180,17 @@ npx cap open android
 ```
 
 Source: [Installing Capacitor](https://capacitor.ionicframework.com/docs/getting-started) and [Building an Ionic Framework Camera App](https://capacitor.ionicframework.com/docs/guides/ionic-framework-app)
+
+## References
+
+- [Angular](https://angular.io/)
+  - [Getting start with service workers](https://angular.io/guide/service-worker-getting-started)
+  - [Service worker configuration](https://angular.io/guide/service-worker-config)
+- [http-server](https://www.npmjs.com/package/http-server)
+- [Capacitor](https://capacitor.ionicframework.com/)
+  - [Installation](https://capacitor.ionicframework.com/docs/getting-started)
+  - [Camera App](https://capacitor.ionicframework.com/docs/guides/ionic-framework-app)
+  - [APIs](https://capacitor.ionicframework.com/docs/apis)
+  - [Community Plugins](https://capacitor.ionicframework.com/docs/community/plugins/)
+  - [GitHub](https://github.com/ionic-team/capacitor)
+- [Ionic](https://ionicframework.com/)
